@@ -21,10 +21,13 @@ RUN apt-get update \
 RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} -s /bin/bash -d /home/ofuser \
 &&  echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
 
+USER ${DOCKER_USER}
 RUN mkdir /home/ofuser/OpenFOAM \
 &&  curl -SL https://sourceforge.net/projects/openfoam/files/v2012/OpenFOAM-v2012.tgz \
     | tar -xzC /home/ofuser/OpenFOAM
+# &&  cd /home/ofuser/OpenFOAM/OpenFOAM-v2012 \
+# &&  . etc/bashrc \
+# &&  ./Allwmake -j 2
 
 # COPY MyFile.txt /root/
-
-USER ${DOCKER_USER}
+# USER ${DOCKER_USER}
