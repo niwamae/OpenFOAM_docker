@@ -22,12 +22,13 @@ RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} -s /bin/bash -d 
 &&  echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
 
 USER ${DOCKER_USER}
+ENV USER=${DOCKER_USER}
 RUN mkdir /home/ofuser/OpenFOAM \
 &&  curl -SL https://sourceforge.net/projects/openfoam/files/v2012/OpenFOAM-v2012.tgz \
     | tar -xzC /home/ofuser/OpenFOAM
 # &&  cd /home/ofuser/OpenFOAM/OpenFOAM-v2012 \
-# &&  . etc/bashrc \
-# &&  ./Allwmake -j 2
+WORKDIR /home/${DOCKER_USER}/OpenFOAM/OpenFOAM-v2012
+RUN  . etc/bashrc && ./Allwmake -j 2
 
-# COPY MyFile.txt /root/
 # USER ${DOCKER_USER}
+WORKDIR /home/${DOCKER_USER}
